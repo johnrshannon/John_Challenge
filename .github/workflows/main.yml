@@ -8,23 +8,30 @@ jobs:
       - name: testingsecrets
         run: echo "${{ secrets.EC2_USER }}"
       - name: SSH Remote Commands
-        uses: appleboy/ssh-action@v0.1.5
+        uses: appleboy/ssh-action@dce9d565de8d876c11d93fa4fe677c0285a66d78
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          script: whoami
-          
+          script: |
+            echo start
+            whoami
+            ls
+            pwd
+            rm -f testtxt.txt
+            touch testtxt.txt
+            exit
+            
       # To use this repository's private action,
       # you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Hello world action step
-        uses: ./ # Uses an action in the root directory
-        id: hello
-        with:
-          who-to-gret: 'Mona the Octocat'
+      # - name: Checkout
+      #  uses: actions/checkout@v3
+      #- name: Hello world action step
+      #  uses: ./ # Uses an action in the root directory
+      #  id: hello
+      #  with:
+      #    who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.timeoutputval }}"
+      #- name: Get the output time
+      #  run: echo "The time was ${{ steps.hello.outputs.timeoutputval }}"
 
