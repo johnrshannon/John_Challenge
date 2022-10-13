@@ -48,4 +48,4 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             docker pull sryjohn/nginx_webserver:main
-            docker run -p 80:80 -p 443:443 sryjohn/nginx_webserver:main
+            docker run -d -p 80:80 -p 443:443 sryjohn/nginx_webserver:main
