@@ -49,5 +49,5 @@ jobs:
           script: |
             sudo yum -y install docker
             sudo service docker start
-            docker pull sryjohn/nginx_webserver:main
-            docker run -d -p 80:80 -p 443:443 sryjohn/nginx_webserver:main
+            sudo docker pull sryjohn/nginx_webserver:main
+            sudo docker run -d -p 80:80 -p 443:443 sryjohn/nginx_webserver:main
