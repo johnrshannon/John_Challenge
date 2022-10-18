@@ -82,6 +82,7 @@ jobs:
             sudo docker run -d -p 80:80 -p 443:443 sryjohn/nginx_webserver:main
 
     - name: Run tests
-      run: bash tests/valid200test.sh 
-      run: bash tests/redirect301test.sh
-      run: bash tests/directedwheretest.sh 
+      run: |
+      bash tests/valid200test.sh 
+      bash tests/redirect301test.sh
+      bash tests/directedwheretest.sh 
