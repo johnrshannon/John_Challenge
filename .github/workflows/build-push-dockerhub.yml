@@ -3,14 +3,16 @@ name: build-push-dockerhub
 on: [push]
 jobs:
   build:
-    name: Build Image
+    name: Runner Tasks 
     runs-on: ubuntu-latest
    
     steps:
-
+      
+      # clone our repo to make use of its files in workflow
     - name: Check out code
       uses: actions/checkout@v3
-    
+
+      # credential ourselves for the CloudFormation deploy (using IAM keys)
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -18,37 +20,45 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_YONI_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
       
+      # create AWS stack using provisioning template yaml
     - name: Deploy to AWS CloudFormation
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
         name: HelloWorlderWebApp
         template: HelloWorldWebApp.yaml
-        
-    - name: Sleep for 90 seconds
-      run: sleep 90s
+      
+      # pause to ensure CloudFormation-resources are fully provisioned   
+    - name: Sleep for 45 seconds
+      run: sleep 45s
       shell: bash
       
+      # credential for Docker Hub, such that we can successfully push/pull
     - name: Log in to Docker Hub
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          
+      
+      # staging Docker image tagging and labeling    
     - name: Extract metadata (tags, labels) for Docker
       id: meta
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
           images: sryjohn/nginx_webserver
       
+      # creating directory on runner for our SSL certificate keys
     - name: make dir for certs
       run: mkdir certfiles
       
+      # write the public half of the SSL certificate key
     - name: create cert crt
       run: echo "${{ secrets.DOMAIN_CERT }}" > certfiles/johnrshannon.net.crt 
       
+      # write the private half of the SSL certificate key
     - name: creaste cert key
       run: echo "${{ secrets.DOMAIN_CERT_KEY }}" > certfiles/johnrshannon.net.key
       
+      # build image from Dockerfile, push to Docker Hub for later retrieval
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
@@ -57,6 +67,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      # SSH into EC2 instance, install Docker, start the Daemon, pull image from DH
+      # run the Docker container w/ appropriate port mapping for web serving
     - name: SSH Remote Commands
       uses: appleboy/ssh-action@dce9d565de8d876c11d93fa4fe677c0285a66d78
       with:

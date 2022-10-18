@@ -1,4 +1,6 @@
+# declare a block for all our AWS resources
 Resources:
+  # EC2 instance
   HelloWorldInstance:
     Type: AWS::EC2::Instance
     Properties: 
@@ -6,13 +8,16 @@ Resources:
       ImageId: ami-0f924dc71d44d23e2
       InstanceType: t2.micro
       KeyName: test ec2 instance
+      # the ref is to the security group provisioned on line 19
       SecurityGroupIds:
         - !Ref HelloWorldSG
+  # associating extant elastic IP to the provisioned instance
   HelloWorldEIP:
     Type: AWS::EC2::EIPAssociation
     Properties:
       InstanceId: !Ref HelloWorldInstance
       AllocationId: eipalloc-06f3c467cfe30aef0	
+  # provisioning a security group for our ingress rules
   HelloWorldSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
