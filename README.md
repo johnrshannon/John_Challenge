@@ -21,7 +21,7 @@ For this project, please think about how you would architect a scalable and secu
 
 **Automated AWS Deployment of Web App**
 
-My approach to this problem started with AWS Amplify. I was pleasantly surprised to discover this service, which offers just about everything asked for in the assessment- from an auto-assigned certificate and http->https redirect, to easy integration with Route53 for DNS record assignment, and implicit access to autoscaling and monitoring with CloudWatch. It even walks the user through the construction of a synthetic canary to monitor reliability. You can seed it with any Github repo, and it'll use it to spark its CICD pipeline. You can find that solution at amplify.johnrshannon.net. It came together in just a few minutes.
+My approach to this problem started with AWS Amplify. I was pleasantly surprised to discover this service, which offers just about everything asked for in the assessment- from an auto-assigned certificate and http->https redirect, to easy integration with Route53 for DNS record assignment, and implicit access to autoscaling and monitoring with CloudWatch. It even walks the user through the construction of a synthetic canary to monitor reliability. You can seed it with any Github repo, and it'll use it to spark its CICD pipeline. You can find that solution at (amplify.johnrshannon.net). 
 
 For my actual, non-turnkey solution I chose Nginx as my web server. It's serving my index.html page, it's redirecting traffic from 80 to 443, and it's integrating my certificate for handling https. 
 
@@ -29,6 +29,6 @@ Rather than Terraform and Ansible, I went with AWS CloudFormation for provisioni
 
 I used Github Actions as my CI/CD model. The .yaml in .github/workflows/ holds most of the logic of the project- from credentialing in AWS, to creating a new CFN stack with the template, to credentialing for Docker Hub, to staging everything for the Nginx configuration, to building and pushing the Docker image, to SSH'ing into the EC2 instance and running the needed Docker commands, up to running the correctness tests. This workflow is triggered by a Git push. 
 
-I have plenty of thoughts about scalability and monitoring, should the conversation go further. 
+This form of the project is accessed at (www.johnrshannon.net). I have plenty of thoughts about scalability and monitoring, should the conversation go further. 
 
-Also re: the credit card solution: this monstrosity isn't really deplyable (or legal (or morally decent)), as I ran out of time. Just quickly showing I can parse and throw together the needed regex. 
+Also re: the credit card solution: this monstrosity isn't really deplyable (or legal (or morally defensible)), as I ran out of time. Just quickly showing I can parse and throw together the needed regex. 
