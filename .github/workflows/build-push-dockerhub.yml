@@ -55,7 +55,7 @@ jobs:
       run: echo "${{ secrets.DOMAIN_CERT }}" > certfiles/johnrshannon.net.crt 
       
       # write the private half of the SSL certificate key
-    - name: creaste cert key
+    - name: create cert key
       run: echo "${{ secrets.DOMAIN_CERT_KEY }}" > certfiles/johnrshannon.net.key
       
       # build image from Dockerfile, push to Docker Hub for later retrieval
@@ -80,3 +80,8 @@ jobs:
             sudo service docker start
             sudo docker pull sryjohn/nginx_webserver:main
             sudo docker run -d -p 80:80 -p 443:443 sryjohn/nginx_webserver:main
+
+    - name: Run tests
+      run: bash tests/valid200test.sh 
+      run: bash tests/redirect301test.sh
+      run: bash tests/directedwheretest.sh 
