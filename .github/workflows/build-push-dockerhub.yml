@@ -81,7 +81,14 @@ jobs:
             sudo docker pull sryjohn/nginx_webserver:main
             sudo docker run -d -p 80:80 -p 443:443 sryjohn/nginx_webserver:main
 
-    - name: Run tests
-    - run: bash tests/valid200test.sh 
-    - run: bash tests/redirect301test.sh
-    - run: bash tests/directedwheretest.sh 
+    - name: Run test 1
+      run: ./tests/valid200test.sh
+      shell: bash
+
+    - name: Run test 2
+      run: ./tests/redirect301test.sh
+      shell: bash
+
+    - name: Run test 3  
+      run: ./tests/directedwheretest.sh 
+      shell: bash
