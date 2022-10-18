@@ -1,0 +1,32 @@
+Resources:
+  HelloWorldInstance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      AvailabilityZone: us-east-2a
+      ImageId: ami-0f924dc71d44d23e2
+      InstanceType: t2.micro
+      KeyName: test ec2 instance
+      SecurityGroupIds:
+        - !Ref HelloWorldSG
+  HelloWorldEIP:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      InstanceId: !Ref HelloWorldInstance
+      AllocationId: eipalloc-06f3c467cfe30aef0	
+  HelloWorldSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Rules for routing
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0 
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
