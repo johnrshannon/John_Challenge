@@ -24,25 +24,8 @@ jobs:
         name: HelloWorlderWebApp
         template: HelloWorldWebApp.yaml
         
-    - name: Sleep for 30 seconds
-      run: sleep 180s
-      shell: bash
-      
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_YONI_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_YONI_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
-      
-    - name: Deploy to AWS CloudFormation
-      uses: aws-actions/aws-cloudformation-github-deploy@v1
-      with:
-        name: HelloWorlderWebApp
-        template: HelloWorldWebApp.yaml
-        
-    - name: Sleep for 30 seconds
-      run: sleep 180s
+    - name: Sleep for 90 seconds
+      run: sleep 90s
       shell: bash
       
     - name: Log in to Docker Hub
